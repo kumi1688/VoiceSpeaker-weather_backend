@@ -39,12 +39,14 @@ class RabbitmqWrapper {
     }
 
     encode(doc) {
+        // console.dir(Buffer.from(JSON.stringify(doc)));
         return Buffer.from(JSON.stringify(doc));
     }
 
     async sendMessage(value) {
         await this.setup();
         await this.assertQueue();
+        // console.log(value);
         await this.sendToQueue(value);
     }
 

@@ -58,7 +58,7 @@ queryParams +=
   const sendWeatherData = async (data) => {
     try{
         const url = 'amqp://ksh:1234@3.34.5.103';
-        const queueName = 'res/weather/Info/general';
+        const queueName = 'res/weather/info/general';
         const rq = new RabbitmqWrapper(url, queueName);
         // console.dir(data);
         await rq.sendMessage(data);
@@ -66,7 +66,6 @@ queryParams +=
         console.log(e);
         res.send('error');
     }
-    
 }
 
   module.exports = {
