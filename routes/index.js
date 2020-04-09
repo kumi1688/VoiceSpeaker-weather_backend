@@ -8,7 +8,7 @@ amqp.connect('amqp://ksh:1234@3.34.5.103', (error0, connection)=>{
   if(error0){throw error0;}
   connection.createChannel((error1, channel)=>{
     if(error1) {throw error1};
-    const queue = 'req/weather/Info/general';
+    const queue = 'req/weather/info/general';
     
     channel.assertQueue(queue, {
       durable: false
@@ -20,7 +20,6 @@ amqp.connect('amqp://ksh:1234@3.34.5.103', (error0, connection)=>{
         const value = msg.content.toString();
         console.log('[x] Received %s', value);
         const data = await getWeatherData();
-        // console.log(data);
         sendWeatherData(data);
     }, {noAck:true});
   });
