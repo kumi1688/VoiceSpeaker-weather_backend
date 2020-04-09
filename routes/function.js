@@ -1,4 +1,5 @@
 var axios = require('axios');
+const RabbitmqWrapper = require('./rabbitmq.js');
 
 var url = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
 var queryParams =
@@ -48,28 +49,26 @@ queryParams +=
   "=" +
   encodeURIComponent("120"); /* 예보지점의 Y 좌표값 */
 
-  async function getWeatherData(){
+  const getWeatherData = async () => {
       const result = await axios.get(url + queryParams);
-    //   console.log(result);
-      console.log(result.data.response.body.items.item);
+      // console.log(result.data.response.body.items.item);
       return result.data.response.body.items.item;
   }
 
-  module.exports = {
-      getWeatherData
-  }
-//   request(
-//     {
-//       url: url + queryParams,
-//       method: "GET"
-//     },
-//     function(error, response, body) {
-//       // console.log("Status", response.statusCode);
-//       // console.log("Headers", JSON.stringify(response.headers));
-//       // console.log(body);
-  
-//       let data = JSON.parse(body);
-//       console.log("Reponse received", data.response.body.items);
-//     }
-//   );
+  const sendWeatherData = async (data) => {
+    try{
+        const url = 'amqp://ksh:1234@3.34.5.103';
+        const queueName = 'res/weather/Info/general';
+        const rq = new RabbitmqWrapper(url, queueName);
+        // console.dir(data);
+        await rq.sendMessage(data);
+    }catch(e){
+        console.log(e);
+        res.send('error');
+    }
+    
+}
 
+  module.exports = {
+      getWeatherData, sendWeatherData
+  }
