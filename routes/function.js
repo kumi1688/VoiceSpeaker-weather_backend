@@ -32,7 +32,7 @@ queryParams +=
   "&" +
   encodeURIComponent("base_date") +
   "=" +
-  encodeURIComponent("20200409"); /* 15년 12월 1일발표 */
+  encodeURIComponent("20200410"); /* 15년 12월 1일발표 */
 queryParams +=
   "&" +
   encodeURIComponent("base_time") +
