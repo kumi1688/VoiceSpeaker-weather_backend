@@ -2,7 +2,8 @@ var axios = require('axios');
 const RabbitmqWrapper = require('./rabbitmq.js');
 
 var url = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
-var queryParams =
+const getQueryParams = (date) => {
+let queryParams = 
   "?" +
   encodeURIComponent("ServiceKey") +
   "=fQQmInPFuI3k1pbQjX1BaCfOE6zFzNXa9hXAEs92vl6OI140GB%2BGkwowNuF0YyKuRNTRFy%2F5BWAZb7N0ZfDuUw%3D%3D"; /* Service Key*/
@@ -32,12 +33,12 @@ queryParams +=
   "&" +
   encodeURIComponent("base_date") +
   "=" +
-  encodeURIComponent("20200410"); /* 15년 12월 1일발표 */
+  encodeURIComponent(date); /* 15년 12월 1일발표 */
 queryParams +=
   "&" +
   encodeURIComponent("base_time") +
   "=" +
-  encodeURIComponent("1100"); /* 05시 발표 */
+  encodeURIComponent("0500"); /* 05시 발표 */
 queryParams +=
   "&" +
   encodeURIComponent("nx") +
@@ -48,9 +49,18 @@ queryParams +=
   encodeURIComponent("ny") +
   "=" +
   encodeURIComponent("120"); /* 예보지점의 Y 좌표값 */
+  return queryParams;
+};
 
   const getWeatherData = async () => {
-      const result = await axios.get(url + queryParams);
+      const date = new Date();
+      const year = date.getFullYear().toString();
+      const month = date.getMonth() < 10 ? '0' + (date.getMonth()+1).toString() : (date.getMonth()+1).toString();
+      const day = date.getDate().toString();
+      const currentDate = year + month + day; 
+      // console.log(url + getQueryParams(currentDate));
+      
+      const result = await axios.get(url + getQueryParams(currentDate));
       // console.log(result.data.response.body.items.item);
       return result.data.response.body.items.item;
   }
